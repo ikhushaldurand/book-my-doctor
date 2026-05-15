@@ -19,7 +19,7 @@ const Navbar = () => {
   }
 
   const goToUserPanel = () => {
-    window.location.href = 'https://appointy-roan.vercel.app/'
+    window.location.href = 'http://localhost:5173/'
   }
 
   const isOnDashboard =
@@ -35,7 +35,7 @@ const Navbar = () => {
           onClick={() => navigate('/')}
           className='w-36 sm:w-40 cursor-pointer'
           src={assets.admin_logo}
-          alt="Logo"
+          alt="BookMyDoctor Logo"
         />
 
         {/* Role Label */}
@@ -47,7 +47,7 @@ const Navbar = () => {
         {isOnDashboard && (
           <button
             onClick={goToUserPanel}
-            className='ml-2 text-white bg-primary hover:bg-gray-700 px-3 py-1.5 rounded-full text-xs'
+            className='ml-2 text-white bg-primary hover:bg-primary-dark px-3 py-1.5 rounded-full text-xs'
           >
             User Panel
           </button>

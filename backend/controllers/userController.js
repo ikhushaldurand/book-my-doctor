@@ -1,5 +1,7 @@
+import '../config/loadEnv.js'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
+import mongoose from 'mongoose'
 import userModel from "../models/userModel.js";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
@@ -9,11 +11,20 @@ import razorpay from 'razorpay';
 
     
 
+// #region agent log
+const debugLog = (message, data, hypothesisId) => {
+    fetch('http://127.0.0.1:7921/ingest/b58c4e59-7555-4566-a78e-99a97b7ff60d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'d45d29'},body:JSON.stringify({sessionId:'d45d29',location:'userController.js',message,data,timestamp:Date.now(),hypothesisId})}).catch(()=>{});
+};
+// #endregion
+
 // API to register user
 const registerUser = async (req, res) => {
 
     try {
         const { name, email, password } = req.body;
+        // #region agent log
+        debugLog('register_start', { hasName: !!name, hasEmail: !!email, dbReady: mongoose.connection.readyState }, 'B');
+        // #endregion
 
         // checking for all data to register user
         if (!name || !email || !password) {
@@ -44,10 +55,16 @@ const registerUser = async (req, res) => {
         const user = await newUser.save()
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
 
+        // #region agent log
+        debugLog('register_success', { userId: String(user._id) }, 'B');
+        // #endregion
         res.json({ success: true, token })
 
     } catch (error) {
         console.log(error)
+        // #region agent log
+        debugLog('register_error', { message: error.message }, 'B');
+        // #endregion
         res.json({ success: false, message: error.message })
     }
 }
@@ -57,6 +74,9 @@ const loginUser = async (req, res) => {
 
     try {
         const { email, password } = req.body;
+        // #region agent log
+        debugLog('login_start', { hasEmail: !!email, dbReady: mongoose.connection.readyState }, 'C');
+        // #endregion
         const user = await userModel.findOne({ email })
 
         if (!user) {
@@ -67,6 +87,9 @@ const loginUser = async (req, res) => {
 
         if (isMatch) {
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+            // #region agent log
+            debugLog('login_success', { userId: String(user._id) }, 'C');
+            // #endregion
             res.json({ success: true, token })
         }
         else {
@@ -74,6 +97,9 @@ const loginUser = async (req, res) => {
         }
     } catch (error) {
         console.log(error)
+        // #region agent log
+        debugLog('login_error', { message: error.message }, 'C');
+        // #endregion
         res.json({ success: false, message: error.message })
     }
 }

@@ -30,7 +30,7 @@ const App = () => {
   // Admin layout and routes
   if (aToken) {
     return (
-      <div className='bg-[#F8F9FD]'>
+      <div className='bg-primary-page'>
         <ToastContainer />
         <Navbar />
         <div className='flex items-start'>
@@ -50,7 +50,7 @@ const App = () => {
   // Doctor layout and routes
   if (dToken) {
     return (
-      <div className='bg-[#F8F9FD]'>
+      <div className='bg-primary-page'>
         <ToastContainer />
         <Navbar />
         <div className='flex items-start'>

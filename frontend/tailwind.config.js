@@ -10,7 +10,13 @@ export default {
         'auto':'repeat(auto-fill, minmax(200px, 1fr))'
       },
       colors:{
-        'primary':'#5F6FFF'
+        'primary': '#20796d',
+        'primary-dark': '#185a52',
+        'primary-light': '#E6F3F1',
+        'primary-lighter': '#D4EBE8',
+        'primary-border': '#B8DDD8',
+        'primary-surface': '#EEF6F5',
+        'primary-page': '#F4F9F8',
       }
     },
   },

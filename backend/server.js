@@ -1,6 +1,7 @@
+import './config/loadEnv.js'
 import express from 'express'
 import cors from 'cors'
-import 'dotenv/config'
+import mongoose from 'mongoose'
 import connectDB from './config/mongodb.js'
 import connectCloudinary from './config/cloudinary.js'
 import adminRouter from './routes/adminRoute.js'
@@ -10,10 +11,6 @@ import userRouter from './routes/userRoute.js'
 // app config
 const app = express()
 const port = process.env.PORT || 4000
-
-// Connect to database (CALL THE FUNCTION)
-connectDB()
-connectCloudinary()
 
 // middlewares
 app.use(express.json())
@@ -39,5 +36,10 @@ app.get('/test-db', (req, res) => {
   }
 });
 
+const startServer = async () => {
+  await connectDB()
+  connectCloudinary()
+  app.listen(port, () => console.log(`Server started on PORT:${port}`))
+}
 
-app.listen(port, () => console.log(`Server started on PORT:${port}`))
+startServer()

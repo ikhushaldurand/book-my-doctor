@@ -17,6 +17,9 @@ const Login = () => {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     try{
+    // #region agent log
+    fetch('http://127.0.0.1:7921/ingest/b58c4e59-7555-4566-a78e-99a97b7ff60d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'d45d29'},body:JSON.stringify({sessionId:'d45d29',location:'Login.jsx:onSubmit',message:'submit_start',data:{state,backendUrl:backendUrl||'(empty)'},timestamp:Date.now(),hypothesisId:'D'})}).catch(()=>{});
+    // #endregion
     if (state === 'Sign Up') {
 
       const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password })
@@ -40,7 +43,11 @@ const Login = () => {
       }
 
     }}catch(error){
-      toast.error(error.message)
+      const msg = error.response?.data?.message || error.message
+      // #region agent log
+      fetch('http://127.0.0.1:7921/ingest/b58c4e59-7555-4566-a78e-99a97b7ff60d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'d45d29'},body:JSON.stringify({sessionId:'d45d29',location:'Login.jsx:catch',message:'submit_error',data:{msg,status:error.response?.status},timestamp:Date.now(),hypothesisId:'D'})}).catch(()=>{});
+      // #endregion
+      toast.error(msg)
     }
 
   }
